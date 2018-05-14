@@ -1,4 +1,5 @@
-# Go lang Web application using dynamodb
+# Web application using Go lang,  Dynamodb, ReactJS
+-
 
 ## Setup steps 
 - Create table ```products``` in AWS Dynamodb 
