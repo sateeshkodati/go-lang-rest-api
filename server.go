@@ -11,6 +11,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -31,6 +32,9 @@ func main() {
 	apiRouter.Methods("PUT").Path("/products/{name}").HandlerFunc(handler.UpdateProduct)
 	apiRouter.Methods("DELETE").Path("/products/{name}").HandlerFunc(handler.DeleteProduct)
 
+	handler := cors.AllowAll().Handler(apiRouter)
+
 	fmt.Println("Server running at http://localhost:3000")
-	log.Fatal(http.ListenAndServe(":3000", router))
+
+	log.Fatal(http.ListenAndServe(":3000", handler))
 }

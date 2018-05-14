@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -56,6 +57,7 @@ func UpdateProduct(res http.ResponseWriter, req *http.Request) {
 	name := vars["name"]
 
 	body, err := ioutil.ReadAll(req.Body)
+	fmt.Println(body)
 	if err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 	}
