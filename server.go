@@ -14,12 +14,12 @@ import (
 )
 
 func main() {
-	env := os.Getenv("APP_ENV")
+	// env := os.Getenv("APP_ENV")
 	awsRegion := os.Getenv("AWS_DEFAULT_REGION")
 	awsEndpoint := os.Getenv("AWS_ENDPOINT")
 
 	// initialize data base
-	db.InitDB(env, awsRegion, credentials.NewEnvCredentials(), awsEndpoint)
+	db.InitDB(awsRegion, credentials.NewEnvCredentials(), awsEndpoint)
 
 	router := mux.NewRouter().StrictSlash(true)
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()

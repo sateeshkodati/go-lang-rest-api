@@ -12,12 +12,12 @@ import (
 var db *dynamodb.DynamoDB
 
 // Initialize db connection
-func InitDB(env string, awsRegion string, credentials *credentials.Credentials, awsEndpoint string) {
+func InitDB(awsRegion string, credentials *credentials.Credentials, awsEndpoint string) {
 	awsConfig := &aws.Config{
 		Region:      aws.String(awsRegion),
 		Credentials: credentials,
 	}
-	if env == "development" {
+	if awsEndpoint != "" {
 		awsConfig.Endpoint = aws.String(awsEndpoint)
 	}
 
