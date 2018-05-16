@@ -2,7 +2,7 @@ package model
 
 import (
 	"log"
-	"shipt-coding-exercise/db"
+	"go-lang-rest-api-react-app/db"
 	"strconv"
 	"strings"
 

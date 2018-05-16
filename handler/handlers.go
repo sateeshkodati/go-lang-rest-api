@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"shipt-coding-exercise/model"
+	"go-lang-rest-api-react-app/model"
 
 	"github.com/gorilla/mux"
 )

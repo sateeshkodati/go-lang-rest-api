@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"shipt-coding-exercise/db"
-	"shipt-coding-exercise/handler"
+	"go-lang-rest-api-react-app/db"
+	"go-lang-rest-api-react-app/handler"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/gorilla/mux"
