@@ -55,12 +55,12 @@ class App extends Component {
   
   async saveProduct(product) {
     if (!product.name) {
-      alert('name is required');
+      alert("'Name' is required");
       return;
     }
     
     if (!product.price) {
-      alert('name is required');
+      alert("'Price' is required");
       return;
     }
     try {
