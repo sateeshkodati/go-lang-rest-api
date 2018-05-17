@@ -23,11 +23,6 @@ func CreateProduct(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	// if _, ok := db.FindBy(name); ok {
-	// 	http.Error(res, "Found", http.StatusConflict)
-	// 	return
-	// }
-
 	product := new(model.Product)
 	err = json.Unmarshal(body, product)
 	if err != nil {
@@ -40,6 +35,14 @@ func CreateProduct(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	_, ok := model.FindBy(product.Name)
+
+	// fmt.Println(p)
+
+	if ok {
+		http.Error(res, "'name' already exists", http.StatusConflict)
+		return
+	}
 	result := model.Create(product)
 	if !result {
 		http.Error(res, err.Error(), http.StatusBadRequest)

@@ -1,10 +1,11 @@
 package model
 
 import (
-	"log"
 	"go-lang-rest-api-react-app/db"
+	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -17,18 +18,48 @@ type Product struct {
 	Label       string  `json:"label"`
 	Price       float64 `json:"price"`
 	Description string  `json:"description"`
+	CreateOn    int64   `json:"createdon"`
+	Year        int64   `json:"year"`
 }
 
 var Tablename = "products"
 
 func FindAll() []Product {
 	db := db.GetDb()
-	params := &dynamodb.ScanInput{
+
+	currentTime := time.Now()
+
+	currentYear := currentTime.Year()
+
+	queryInput := &dynamodb.QueryInput{
 		TableName: aws.String(Tablename),
+		IndexName: aws.String("year-price-index"),
+		KeyConditions: map[string]*dynamodb.Condition{
+			"year": {
+				ComparisonOperator: aws.String("EQ"),
+				AttributeValueList: []*dynamodb.AttributeValue{
+					{
+						N: aws.String(strconv.FormatInt(int64(currentYear), 10)),
+					},
+				},
+			},
+			"price": {
+				ComparisonOperator: aws.String("GE"),
+				AttributeValueList: []*dynamodb.AttributeValue{
+					{
+						N: aws.String(strconv.FormatInt(int64(0), 10)),
+					},
+				},
+			},
+		},
+		Limit:            aws.Int64(10),
+		ScanIndexForward: aws.Bool(false),
 	}
 
-	// Make the DynamoDB Query API call
-	result, err := db.Scan(params)
+	result, err := db.Query(queryInput)
+
+	// fmt.Println(result)
+
 	if err != nil {
 		log.Println("failed to make Query API call", err)
 	}
@@ -55,13 +86,15 @@ func FindBy(name string) (Product, bool) {
 	}
 
 	result, err := db.GetItem(params)
-
 	item := Product{}
 	if err != nil {
 		log.Println(err)
 		return item, false
 	}
-
+	// fmt.Println(result)
+	if result.Item == nil {
+		return item, false
+	}
 	err = dynamodbattribute.UnmarshalMap(result.Item, &item)
 
 	if err != nil {
@@ -76,6 +109,12 @@ func FindBy(name string) (Product, bool) {
 
 func Create(product *Product) bool {
 	db := db.GetDb()
+
+	currentTime := time.Now()
+	timestamp := currentTime.UnixNano() / int64(time.Millisecond)
+	currentYear := currentTime.Year()
+	product.Year = int64(currentYear)
+	product.CreateOn = timestamp
 
 	av, err := dynamodbattribute.MarshalMap(product)
 
