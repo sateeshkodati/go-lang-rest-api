@@ -30,8 +30,18 @@ type Product struct {
 	Label       string  `json:"label"`
 	Price       float64 `json:"price"`
 	Description string  `json:"description"`
+	CreateOn    int64   `json:"createdon"`
+	Year        int64   `json:"year"`
 }
 ```
+
+### DynamoDb Table
+ -  Create `products` table with `name` as `Primary key`
+ - Create Index `year` as `Primary key` and `price` as `Sort key`year and price ` fields will be 
+    - `name` -> String
+    - `year` -> Number
+    - `price` -> Number
+
 
 ### REST API Resource doc
 
@@ -39,7 +49,8 @@ type Product struct {
 
 - GET - /products  => Get all products - http://localhost:3000/api/v1/products
 ```
-Response: [
+Response: 200 OK
+[
     {
         "name": "product3",
         "label": "aafdlj",
@@ -57,7 +68,8 @@ Response: [
 - GET - /products/{name}  => Get a product - http://localhost:3000/api/v1/products/product1
 - POST - /products => Create product - http://localhost:3000/api/v1/products
 ```
-Response: {
+Response: 200 OK
+{
     "name": "product1",
     "label": "label1",
     "price": 155.45,
@@ -72,9 +84,14 @@ Request: {
     "price": 23.10, 
     "description": "product description
 }
+
+Response: 200 Ok
 ```
 - DELETE - /products/{name} => Delete product
+```
+Response: 204
+```
 
 
-
-
+### TO-DO
+- Get products api pagination
